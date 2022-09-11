@@ -953,7 +953,7 @@ local fps = st:AddLabel("FPS: 0")
 spawn(function()
     while wait() do
         dwAlive = dwLocalPlayer:WaitForChild("Status", 1337):WaitForChild("Alive").Value;
-        if Client.Combat.AUTOFARM and dwAlive then
+        if Client.Combat.AUTOFARM and not dwAlive then
             AutoSpawn()
         end
         
