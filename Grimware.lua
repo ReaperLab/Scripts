@@ -963,7 +963,7 @@ spawn(function()
 end)
 
 spawn(function()
-    while wait(0.1) do
+    while wait(0.03) do
         if fireGun and Client.Combat.FIRERATE then
             require(game.Players.LocalPlayer.PlayerGui.GUI.Client.Functions.Weapons).firebullet()
         end
