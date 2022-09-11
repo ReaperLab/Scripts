@@ -377,12 +377,6 @@ dwRunService.RenderStepped:Connect(function()
     end
 end)
 
-dwRunService.Heartbeat:Connect(function()
-    if fireGun and Client.Combat.FIRERATE then
-        require(game.Players.LocalPlayer.PlayerGui.GUI.Client.Functions.Weapons).firebullet()
-    end
-end)
-
 local addString = ""
 
 if Request("mode") then
@@ -578,11 +572,14 @@ sec1:AddBind({
                 local curVel = dwLocalPlayer.Character:WaitForChild("HumanoidRootPart").Velocity
                 if Client.Movement.B then
                     if not lastD then
-                        dwLocalPlayer.Character:WaitForChild("HumanoidRootPart").Velocity = Vector3.new(curVel.X,-NumBypass-_G.FB,curVel.Z)
+
+                        dwLocalPlayer.Character:WaitForChild("HumanoidRootPart").Velocity = Vector3.new(0,-NumBypass-_G.FB,0)
                     else
                         dwLocalPlayer.Character:WaitForChild("Humanoid").Jump = true
-                        dwLocalPlayer.Character:WaitForChild("HumanoidRootPart").Velocity = Vector3.new(curVel.X,NumBypass+_G.FB,curVel.Z)
+                        dwLocalPlayer.Character:WaitForChild("HumanoidRootPart").Velocity = Vector3.new(0,NumBypass+_G.FB,0)
                     end
+                else
+                    dwLocalPlayer.Character:WaitForChild("HumanoidRootPart").Velocity = Vector3.new(0,0,0)
                 end
 
                 lastD = not lastD
@@ -962,6 +959,14 @@ spawn(function()
             AutoSpawn()
         end
         
+    end
+end)
+
+spawn(function()
+    while wait(0.1) do
+        if fireGun and Client.Combat.FIRERATE then
+            require(game.Players.LocalPlayer.PlayerGui.GUI.Client.Functions.Weapons).firebullet()
+        end
     end
 end)
 
