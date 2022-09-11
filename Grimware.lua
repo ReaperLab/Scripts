@@ -956,21 +956,15 @@ sec3:AddToggle({
 })
 
 function detectHackers(p)
-    if not p.Character or table.find(hackers, p) then
+    if table.find(hackers, p) then
         return
     end
-    if p.Character:FindFirstChild("HumanoidRootPart").Velocity == Vector3.new(0,0,0) and p.Character:FindFirstChild("Humanoid").FloorMaterial == Enum.FloorMaterial.Air then
-        notify("Hacker Detected", p.Name.. " Velocity 0 in air")
-        hackers.insert(p)
-    end
-    if (p.Character:FindFirstChild("HumanoidRootPart").Velocity.X > 50 or p.Character:FindFirstChild("HumanoidRootPart").Velocity.Z > 50) and p.Character:FindFirstChild("Humanoid").FloorMaterial ~= Enum.FloorMaterial.Air then
-        notify("Hacker Detected", p.Name.. " Velocity > 50 on ground")
+    if (p.Character:FindFirstChild("HumanoidRootPart").Velocity.X > 25 or p.Character:FindFirstChild("HumanoidRootPart").Velocity.Z > 25) and p.Character:FindFirstChild("Humanoid").FloorMaterial ~= Enum.FloorMaterial.Air then
+        notify("Hacker Detected", p.Name.. " Velocity > 25 on ground")
         hackers.insert(p)
     end
 end
 
-
-dwEntities.PlayerAdded:Connect(detectHackers)
 
 local dev = st:AddLabel("Dev Mode: OFF")
 local ping = st:AddLabel("Ping: INF")
@@ -991,6 +985,15 @@ spawn(function()
         if fireGun and Client.Combat.FIRERATE then
             require(game.Players.LocalPlayer.PlayerGui.GUI.Client.Functions.Weapons).firebullet()
         end
+    end
+end)
+
+spawn(function()
+    while wait() do
+        for _,v in pairs(dwEntities:GetPlayers()) do
+            detectHackers(v)
+        end
+        wait(0.1)
     end
 end)
 
