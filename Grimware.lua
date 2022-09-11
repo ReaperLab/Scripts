@@ -177,6 +177,8 @@ end)
 
 setreadonly(mt, true)
 
+local hackers = {}
+
 local function esp(p,cr)
     local h = cr:WaitForChild("Humanoid")
     local hrp = cr:WaitForChild("HumanoidRootPart")
@@ -266,6 +268,12 @@ local function esp(p,cr)
                 line.To = Vector2.new(hrp_pos.X, floor(y - height * 0.5)+25)
                 text.Position = Vector2.new(hrp_pos.X, floor(y - height * 0.5)-25)
                 text.Text = p.Name.. " [ "..p:FindFirstChild("Ping").Value.. "ms ]"
+                if p:FindFirstChild("Ping").Value > 10000 then
+                    if not table.find(hackers, p) then
+                        notify("Hacker Detected", p.Name.. "|".. tostring(p:FindFirstChild("Ping").Value))
+                        table.insert(hackers, p)
+                    end
+                end
                 square.Size = Vector2.new(width, height);
                 square.Position = Vector2.new(floor(x - width * 0.5), floor(y - height * 0.5));
 
@@ -354,7 +362,6 @@ dwRunService.RenderStepped:Connect(function()
 	fovcircle.Thickness = 1
 	fovcircle.Filled = false
 	fovcircle.Transparency = 1
-	
 
     local closest_char = getPlayerClosestToMouse()
 
@@ -947,6 +954,23 @@ sec3:AddToggle({
 		Client.Render.NOTIFY = t
 	end    
 })
+
+function detectHackers(p)
+    if not p.Character or table.find(hackers, p) then
+        return
+    end
+    if p.Character:FindFirstChild("HumanoidRootPart").Velocity == Vector3.new(0,0,0) and p.Character:FindFirstChild("Humanoid").FloorMaterial == Enum.FloorMaterial.Air then
+        notify("Hacker Detected", p.Name.. " Velocity 0 in air")
+        hackers.insert(p)
+    end
+    if (p.Character:FindFirstChild("HumanoidRootPart").Velocity.X > 50 or p.Character:FindFirstChild("HumanoidRootPart").Velocity.Z > 50) and p.Character:FindFirstChild("Humanoid").FloorMaterial ~= Enum.FloorMaterial.Air then
+        notify("Hacker Detected", p.Name.. " Velocity > 50 on ground")
+        hackers.insert(p)
+    end
+end
+
+
+dwEntities.PlayerAdded:Connect(detectHackers)
 
 local dev = st:AddLabel("Dev Mode: OFF")
 local ping = st:AddLabel("Ping: INF")
