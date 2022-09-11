@@ -242,7 +242,7 @@ local function esp(p,cr)
         end
     end)
 
-    c1 = rs.RenderStepped:Connect(function()
+    c1 = dwRunService.RenderStepped:Connect(function()
         if Client.Render.ESPTEAMCHECK == true and
                 p.Team ~= dwLocalPlayer.Team or
                 Client.Render.ESPTEAMCHECK == false then
