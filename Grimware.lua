@@ -618,7 +618,9 @@ sec1:AddBind({
             else
                 dwLocalPlayer.Character:WaitForChild("HumanoidRootPart").Velocity = (dwLocalPlayer.Character:WaitForChild("Humanoid").MoveDirection*Vector3.new(Client.Movement.WS,0,Client.Movement.WS))
                 local curVel = dwLocalPlayer.Character:WaitForChild("HumanoidRootPart").Velocity
-                dwLocalPlayer.Character:WaitForChild("HumanoidRootPart").Velocity = Vector3.new(curVel.X,-Client.Movement.JP,curVel.Z)
+                if Client.Movement.BHOPJUMP then
+                    dwLocalPlayer.Character:WaitForChild("HumanoidRootPart").Velocity = Vector3.new(curVel.X,-Client.Movement.JP,curVel.Z)
+                end
             end
             wait()
         end
@@ -857,7 +859,7 @@ sec2:AddToggle({
                     end
                     local c = v.Character
                     repeat
-                        dwLocalPlayer.Character:WaitForChild("HumanoidRootPart").CFrame = c:WaitForChild("HumanoidRootPart").CFrame + Vector3.new(math.random(-8,8),4,math.random(-8,8))
+                        dwLocalPlayer.Character:WaitForChild("HumanoidRootPart").CFrame = c:WaitForChild("HumanoidRootPart").CFrame + Vector3.new(math.random(-8,8),math.random(-4,4),math.random(-8,8))
                         dwLocalPlayer.Character:WaitForChild("HumanoidRootPart").Velocity = Vector3.new(0,0,0)
                         wait()
                         dwCamera.CFrame = CFrame.new(dwCamera.CFrame.Position, c:WaitForChild("Head").Position)
@@ -959,7 +961,7 @@ function detectHackers(p)
     if table.find(hackers, p) then
         return
     end
-    if (p.Character:FindFirstChild("HumanoidRootPart").Velocity.X > 25 or p.Character:FindFirstChild("HumanoidRootPart").Velocity.Z > 25) and p.Character:FindFirstChild("Humanoid").FloorMaterial ~= Enum.FloorMaterial.Air then
+    if (p.Character:FindFirstChild("HumanoidRootPart").Velocity.X > 45 or p.Character:FindFirstChild("HumanoidRootPart").Velocity.Z > 45) and p.Character:FindFirstChild("Humanoid").FloorMaterial ~= Enum.FloorMaterial.Air then
         notify("Hacker Detected", p.Name.. " Velocity > 25 on ground")
         hackers.insert(p)
     end
