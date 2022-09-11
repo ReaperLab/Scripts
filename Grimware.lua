@@ -15,6 +15,7 @@ local Client = {
         LS = 25,
         FB = NumBypass,
         BHOPHELD = false,
+        BHOPJUMP = true,
         FLYHELD = false
     },
     Combat = {
@@ -362,9 +363,6 @@ dwRunService.RenderStepped:Connect(function()
         getsenv(game:GetService("Players").LocalPlayer.PlayerGui.GUI.Client.Functions.Weapons).ammocount.Value = 26
     end
 
-    if fireGun and Client.Combat.FIRERATE then
-        require(game.Players.LocalPlayer.PlayerGui.GUI.Client.Functions.Weapons).firebullet()
-    end
     if Client.Combat.AIMBOT_SETTINGS.Aiming and Client.Movement.AIMBOT then
 
         if closest_char ~= nil and
@@ -376,6 +374,12 @@ dwRunService.RenderStepped:Connect(function()
                 dwCamera.CFrame = tcamcframe:Lerp(CFrame.new(dwCamera.CFrame.p, closest_char.Position-Vector3.new(0,Client.Combat.AIMBOT_SETTINGS.Aimbot_offSet,0)), i)
             end
         end
+    end
+end)
+
+dwRunService.Heartbeat:Connect(function()
+    if fireGun and Client.Combat.FIRERATE then
+        require(game.Players.LocalPlayer.PlayerGui.GUI.Client.Functions.Weapons).firebullet()
     end
 end)
 
@@ -463,6 +467,8 @@ dwLocalPlayer.CharacterAdded:connect(function(Character)
 	end
 end)
 
+-- Combat
+
 sec:AddToggle({
 	Name = "Aimbot",
 	Default = false,
@@ -549,6 +555,212 @@ sec:AddSlider({
 	end    
 })
 
+-- Movement
+
+sec1:AddBind({
+	Name = "Fly",
+    Flag = "fly",
+    Save = true,
+	Default = Enum.KeyCode.F,
+	Hold = false,
+	Callback = function()
+		Client.Movement.FLYHELD = not Client.Movement.FLYHELD
+        if Client.Movement.FLYHELD then
+            notify("Fly", "Toggled on")
+        else
+            notify("Fly", "Toggled off")
+            dwLocalPlayer.Character:WaitForChild("HumanoidRootPart").Velocity = Vector3.new(0,0,0)
+        end
+        local lastD = false
+        while Client.Movement.FLYHELD do
+            if (dwLocalPlayer.Character:WaitForChild("Humanoid").FloorMaterial == Enum.Material.Air) then
+                dwLocalPlayer.Character:WaitForChild("HumanoidRootPart").Velocity = (dwLocalPlayer.Character:WaitForChild("Humanoid").MoveDirection*Vector3.new(Client.Movement.FS,2,Client.Movement.FS))
+                local curVel = dwLocalPlayer.Character:WaitForChild("HumanoidRootPart").Velocity
+                if Client.Movement.B then
+                    if not lastD then
+                        dwLocalPlayer.Character:WaitForChild("HumanoidRootPart").Velocity = Vector3.new(curVel.X,-NumBypass-_G.FB,curVel.Z)
+                    else
+                        dwLocalPlayer.Character:WaitForChild("Humanoid").Jump = true
+                        dwLocalPlayer.Character:WaitForChild("HumanoidRootPart").Velocity = Vector3.new(curVel.X,NumBypass+_G.FB,curVel.Z)
+                    end
+                end
+
+                lastD = not lastD
+            end
+            wait()
+        end
+	end    
+})
+
+
+sec1:AddBind({
+	Name = "Bhop",
+    Flag = "bhop",
+    Save = true,
+	Default = Enum.KeyCode.X,
+	Hold = false,
+	Callback = function()
+		Client.Movement.BHOPHELD = not Client.Movement.BHOPHELD
+        if Client.Movement.BHOPHELD then
+            notify("Bhop", "Toggled on")
+        else
+            notify("Bhop", "Toggled off")
+            dwLocalPlayer.Character:WaitForChild("HumanoidRootPart").Velocity = Vector3.new(0,0,0)
+        end
+        while Client.Movement.BHOPHELD do
+            if (dwLocalPlayer.Character:WaitForChild("Humanoid").FloorMaterial ~= Enum.Material.Air) and Client.Movement.BHOPJUMP then
+                dwLocalPlayer.Character:WaitForChild("Humanoid").Jump = true
+                dwLocalPlayer.Character:WaitForChild("HumanoidRootPart").Velocity = Vector3.new(0,Client.Movement.JPU,0)
+            else
+                dwLocalPlayer.Character:WaitForChild("HumanoidRootPart").Velocity = (dwLocalPlayer.Character:WaitForChild("Humanoid").MoveDirection*Vector3.new(Client.Movement.WS,0,Client.Movement.WS))
+                local curVel = dwLocalPlayer.Character:WaitForChild("HumanoidRootPart").Velocity
+                dwLocalPlayer.Character:WaitForChild("HumanoidRootPart").Velocity = Vector3.new(curVel.X,-Client.Movement.JP,curVel.Z)
+            end
+            wait()
+        end
+        dwLocalPlayer.Character:WaitForChild("HumanoidRootPart").Velocity = Vector3.new(0,0,0)
+	end
+})
+
+sec1:AddBind({
+	Name = "Launch",
+	Default = Enum.KeyCode.Z,
+    Flag = "launch",
+    Save = true,
+	Hold = false,
+	Callback = function()
+		if (dwLocalPlayer.Character:WaitForChild("Humanoid").FloorMaterial ~= Enum.Material.Air) then
+            dwLocalPlayer.Character:WaitForChild("Humanoid").Jump = true
+            dwLocalPlayer.Character:WaitForChild("HumanoidRootPart").Velocity = Vector3.new(0,NumBypass,0)
+            wait(0.3)
+            dwLocalPlayer.Character:WaitForChild("HumanoidRootPart").Velocity = Vector3.new(0,-NumBypass,0)
+            notify("Launch", "Waiting for land...")
+            repeat
+                wait()
+            until (dwLocalPlayer.Character:WaitForChild("Humanoid").FloorMaterial ~= Enum.Material.Air)
+            dwLocalPlayer.Character:WaitForChild("Humanoid").Jump = true
+            wait(0.1)
+            notify("Launch", "Launching...")
+            dwLocalPlayer.Character:WaitForChild("HumanoidRootPart").Velocity = (dwLocalPlayer.Character:WaitForChild("Humanoid").MoveDirection*Vector3.new(50,0,50))
+            local curVel = dwLocalPlayer.Character:WaitForChild("HumanoidRootPart").Velocity
+            dwLocalPlayer.Character:WaitForChild("HumanoidRootPart").Velocity = Vector3.new(curVel.X,Client.Movement.LS,curVel.Z)
+        else
+            notify("Launch", "Please stand on the ground before using.")
+        end
+	end    
+})
+
+sec1:AddToggle({
+	Name = "Fly Bounce",
+    Flag = "flyBounce",
+    Save = true,
+	Default = true,
+	Callback = function(t)
+		Client.Movement.B = t
+	end   
+})
+
+sec1:AddSlider({
+	Name = "Fly Speed",
+    Flag = "flySpeed",
+    Save = true,
+	Min = 1,
+	Max = 100,
+	Default = 25,
+	Color = Color3.fromRGB(9, 99, 195),
+	Increment = 0.5,
+	ValueName = "Speed",
+	Callback = function(t)
+		Client.Movement.FS = t
+	end    
+})
+
+sec1:AddSlider({
+	Name = "Fly Bounce",
+    Flag = "flyBounce",
+    Save = true,
+	Min = 0,
+	Max = 100,
+	Default = 25,
+	Color = Color3.fromRGB(9, 99, 195),
+	Increment = 0.5,
+	ValueName = "Bounce",
+	Callback = function(t)
+		_G.FB = t
+	end    
+})
+
+sec1:AddToggle({
+	Name = "Bhop Jump",
+    Flag = "bhopJump",
+    Save = true,
+	Default = true,
+	Callback = function(t)
+		Client.Movement.BHOPJUMP = t
+	end
+})
+
+sec1:AddSlider({
+	Name = "Bhop Speed",
+    Flag = "bhopSpeed",
+    Save = true,
+	Min = 1,
+	Max = 100,
+	Default = 50,
+	Color = Color3.fromRGB(9, 99, 195),
+	Increment = 0.5,
+	ValueName = "Speed",
+	Callback = function(t)
+		Client.Movement.WS = t
+	end    
+})
+
+sec1:AddSlider({
+	Name = "Bhop Fall Speed",
+    Flag = "bhopFallSpeed",
+    Save = true,
+	Min = 10,
+	Max = 75,
+	Default = 25,
+	Color = Color3.fromRGB(9, 99, 195),
+	Increment = 0.5,
+	ValueName = "Fall Speed",
+	Callback = function(t)
+		_G.JP = t
+	end    
+})
+
+sec1:AddSlider({
+	Name = "Bhop Jump Velocity",
+    Flag = "bhopJumpVel",
+    Save = true,
+	Min = 10,
+	Max = 75,
+	Default = 50,
+	Color = Color3.fromRGB(9, 99, 195),
+	Increment = 0.5,
+	ValueName = "Jump Velocity",
+	Callback = function(t)
+		Client.Movement.JPU = t
+	end    
+})
+
+sec1:AddSlider({
+	Name = "Launch Speed",
+    Flag = "bhopJumpVel",
+    Save = true,
+	Min = 50,
+	Max = 250,
+	Default = 25,
+	Color = Color3.fromRGB(9, 99, 195),
+	Increment = 0.5,
+	ValueName = "Velocity",
+	Callback = function(t)
+		Client.Movement.LS = t
+	end
+})
+
+-- Gun Mods
 
 secG:AddToggle({
 	Name = "Firerate",
@@ -556,13 +768,7 @@ secG:AddToggle({
     Flag = "firerate",
     Save = true,
 	Callback = function(t)
-        for _,v in pairs(game.ReplicatedStorage.Weapons:GetChildren())do
-            pcall(function()
-                if v:FindFirstChild("FireRate")then
-                    v.ArsoniaFireRate.Value=0.03
-                end
-            end)
-        end
+        Client.Combat.FIRERATE = t
         getsenv(game.Players.LocalPlayer.PlayerGui.GUI.Client).givetools()
         require(game.Players.LocalPlayer.PlayerGui.GUI.Client.Functions.Weapons).usethatgun()
 	end    
@@ -629,210 +835,7 @@ secG:AddToggle({
 	end    
 })
 
-
-sec1:AddBind({
-	Name = "Fly",
-    Flag = "fly",
-    Save = true,
-	Default = Enum.KeyCode.F,
-	Hold = false,
-	Callback = function()
-		Client.Movement.FLYHELD = not Client.Movement.FLYHELD
-        if Client.Movement.FLYHELD then
-            notify("Fly", "Toggled on")
-        else
-            notify("Fly", "Toggled off")
-            dwLocalPlayer.Character:WaitForChild("HumanoidRootPart").Velocity = Vector3.new(0,0,0)
-        end
-        local lastD = false
-        while Client.Movement.FLYHELD do
-            if (dwLocalPlayer.Character:WaitForChild("Humanoid").FloorMaterial == Enum.Material.Air) then
-                dwLocalPlayer.Character:WaitForChild("HumanoidRootPart").Velocity = (dwLocalPlayer.Character:WaitForChild("Humanoid").MoveDirection*Vector3.new(Client.Movement.FS,2,Client.Movement.FS))
-                local curVel = dwLocalPlayer.Character:WaitForChild("HumanoidRootPart").Velocity
-                if Client.Movement.B then
-                    if not lastD then
-                        dwLocalPlayer.Character:WaitForChild("HumanoidRootPart").Velocity = Vector3.new(curVel.X,-NumBypass-_G.FB,curVel.Z)
-                    else
-                        dwLocalPlayer.Character:WaitForChild("Humanoid").Jump = true
-                        dwLocalPlayer.Character:WaitForChild("HumanoidRootPart").Velocity = Vector3.new(curVel.X,NumBypass+_G.FB,curVel.Z)
-                    end
-                end
-
-                
-                lastD = not lastD
-            end
-            wait()
-        end
-	end    
-})
-
-
-sec1:AddBind({
-	Name = "Bhop",
-    Flag = "bhop",
-    Save = true,
-	Default = Enum.KeyCode.X,
-	Hold = false,
-	Callback = function()
-		Client.Movement.BHOPHELD = not Client.Movement.BHOPHELD
-        if Client.Movement.BHOPHELD then
-            notify("Bhop", "Toggled on")
-        else
-            notify("Bhop", "Toggled off")
-            dwLocalPlayer.Character:WaitForChild("HumanoidRootPart").Velocity = Vector3.new(0,0,0)
-        end
-        while Client.Movement.BHOPHELD do
-            if (dwLocalPlayer.Character:WaitForChild("Humanoid").FloorMaterial ~= Enum.Material.Air) then
-                dwLocalPlayer.Character:WaitForChild("Humanoid").Jump = true
-                dwLocalPlayer.Character:WaitForChild("HumanoidRootPart").Velocity = Vector3.new(0,Client.Movement.JPU,0)
-            else
-                dwLocalPlayer.Character:WaitForChild("HumanoidRootPart").Velocity = (dwLocalPlayer.Character:WaitForChild("Humanoid").MoveDirection*Vector3.new(Client.Movement.WS,0,Client.Movement.WS))
-                local curVel = dwLocalPlayer.Character:WaitForChild("HumanoidRootPart").Velocity
-                dwLocalPlayer.Character:WaitForChild("HumanoidRootPart").Velocity = Vector3.new(curVel.X,-Client.Movement.JP,curVel.Z)
-            end
-            wait()
-        end
-        dwLocalPlayer.Character:WaitForChild("HumanoidRootPart").Velocity = Vector3.new(0,0,0)
-	end
-})
-
-sec1:AddBind({
-	Name = "Launch",
-	Default = Enum.KeyCode.Z,
-    Flag = "launch",
-    Save = true,
-	Hold = false,
-	Callback = function()
-		if (dwLocalPlayer.Character:WaitForChild("Humanoid").FloorMaterial ~= Enum.Material.Air) then
-            dwLocalPlayer.Character:WaitForChild("Humanoid").Jump = true
-            dwLocalPlayer.Character:WaitForChild("HumanoidRootPart").Velocity = Vector3.new(0,NumBypass,0)
-            wait(0.3)
-            dwLocalPlayer.Character:WaitForChild("HumanoidRootPart").Velocity = Vector3.new(0,-NumBypass,0)
-            repeat
-                wait()
-            until (dwLocalPlayer.Character:WaitForChild("Humanoid").FloorMaterial ~= Enum.Material.Air)
-            dwLocalPlayer.Character:WaitForChild("Humanoid").Jump = true
-            wait(0.1)
-            dwLocalPlayer.Character:WaitForChild("HumanoidRootPart").Velocity = (dwLocalPlayer.Character:WaitForChild("Humanoid").MoveDirection*Vector3.new(50,0,50))
-            local curVel = dwLocalPlayer.Character:WaitForChild("HumanoidRootPart").Velocity
-            dwLocalPlayer.Character:WaitForChild("HumanoidRootPart").Velocity = Vector3.new(curVel.X,Client.Movement.LS,curVel.Z)
-        else
-            notify("Launch", "Please stand on the ground before using.")
-        end
-	end    
-})
-
-sec1:AddToggle({
-	Name = "Fly Bounce",
-    Flag = "flyBounce",
-    Save = true,
-	Default = true,
-	Callback = function(t)
-		Client.Movement.B = t
-	end   
-})
-
-sec1:AddSlider({
-	Name = "Fly Speed",
-    Flag = "flySpeed",
-    Save = true,
-	Min = 1,
-	Max = 100,
-	Default = 25,
-	Color = Color3.fromRGB(9, 99, 195),
-	Increment = 0.5,
-	ValueName = "Speed",
-	Callback = function(t)
-		Client.Movement.FS = t
-	end    
-})
-
-sec1:AddSlider({
-	Name = "Fly Bounce",
-    Flag = "flyBounce",
-    Save = true,
-	Min = 0,
-	Max = 100,
-	Default = 25,
-	Color = Color3.fromRGB(9, 99, 195),
-	Increment = 0.5,
-	ValueName = "Bounce",
-	Callback = function(t)
-		_G.FB = t
-	end    
-})
-
-sec1:AddSlider({
-	Name = "Bhop Speed",
-    Flag = "bhopSpeed",
-    Save = true,
-	Min = 1,
-	Max = 100,
-	Default = 50,
-	Color = Color3.fromRGB(9, 99, 195),
-	Increment = 0.5,
-	ValueName = "Speed",
-	Callback = function(t)
-		Client.Movement.WS = t
-	end    
-})
-
-sec1:AddSlider({
-	Name = "Bhop Fall Speed",
-    Flag = "bhopFallSpeed",
-    Save = true,
-	Min = 10,
-	Max = 75,
-	Default = 25,
-	Color = Color3.fromRGB(9, 99, 195),
-	Increment = 0.5,
-	ValueName = "Fall Speed",
-	Callback = function(t)
-		_G.JP = t
-	end    
-})
-
-sec1:AddSlider({
-	Name = "Bhop Jump Velocity",
-    Flag = "bhopJumpVel",
-    Save = true,
-	Min = 10,
-	Max = 75,
-	Default = 50,
-	Color = Color3.fromRGB(9, 99, 195),
-	Increment = 0.5,
-	ValueName = "Jump Velocity",
-	Callback = function(t)
-		Client.Movement.JPU = t
-	end    
-})
-
-sec1:AddSlider({
-	Name = "Launch Speed",
-    Flag = "bhopJumpVel",
-    Save = true,
-	Min = 50,
-	Max = 250,
-	Default = 25,
-	Color = Color3.fromRGB(9, 99, 195),
-	Increment = 0.5,
-	ValueName = "Velocity",
-	Callback = function(t)
-		Client.Movement.LS = t
-	end
-})
-
-sec2:AddButton({
-	Name = "Respawn",
-	Callback = function()
-        if Client.Combat.USED_RE then
-            notify("Respawn", "Already trying to respawn...")
-            return
-        end
-        Client.Combat.USED_RE = true
-        notify("Respawn", "Trying to respawn...")
-  	end
-})
+-- Character
 
 sec2:AddToggle({
 	Name = "AutoFarm",
@@ -864,6 +867,8 @@ sec2:AddToggle({
         end
 	end    
 })
+
+-- Render
 
 sec3:AddColorpicker({
 	Name = "ESP Color",
