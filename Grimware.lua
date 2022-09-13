@@ -843,10 +843,6 @@ secG:AddToggle({
 
 -- Character
 
-function fireGun(c)
-    dwCamera.CFrame = CFrame.new(dwCamera.CFrame.Position, c:WaitForChild("Head").Position)
-    require(game.Players.LocalPlayer.PlayerGui.GUI.Client.Functions.Weapons).firebullet()
-end
 
 sec2:AddToggle({
 	Name = "AutoFarm",
@@ -867,7 +863,8 @@ sec2:AddToggle({
                     
                         dwLocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(player_cframe.Position,c:WaitForChild("Head").Position)
                         wait()
-                        fireGun(c)
+                        dwCamera.CFrame = CFrame.new(dwCamera.CFrame.Position, c:WaitForChild("Head").Position)
+                        require(game.Players.LocalPlayer.PlayerGui.GUI.Client.Functions.Weapons).firebullet()
                         wait(0.1)
                         
                     until v.Character:FindFirstChild("HumanoidRootPart").Position.Y < -300 or not Client.Combat.AUTOFARM
