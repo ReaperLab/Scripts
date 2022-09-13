@@ -843,6 +843,10 @@ secG:AddToggle({
 
 -- Character
 
+function fireGun()
+    require(game.Players.LocalPlayer.PlayerGui.GUI.Client.Functions.Weapons).firebullet()
+end
+
 sec2:AddToggle({
 	Name = "AutoFarm",
     Flag = "aFarm",
@@ -853,7 +857,7 @@ sec2:AddToggle({
         
         local orbit_step = 0
         local orbit_radius = 8;
-        local speed = 1/5
+        local speed = 1/2
         while Client.Combat.AUTOFARM do
             for _,v in pairs(dwEntities:GetChildren()) do
                 pcall(function()
@@ -867,17 +871,14 @@ sec2:AddToggle({
                         local circle_y = math.cos((orbit_step+(3.14))*speed)*orbit_radius
                 
                         local player_cframe = v.Character.Humanoid.RootPart.CFrame
-                        player_cframe = player_cframe+ Vector3.new(circle_x,0,circle_y)
+                        player_cframe = player_cframe+ Vector3.new(circle_x,4,circle_y)
                     
-                        dwLocalPlayer.Character.Humanoid.RootPart.CFrame = CFrame.new(player_cframe.Position,v.Character.Humanoid.RootPart.Position)
+                        dwLocalPlayer.Character.Humanoid.RootPart.CFrame = CFrame.new(player_cframe.Position,v.Character.Humanoid.Head.Position)
                         orbit_step = orbit_step + 1
                         wait()
                         dwCamera.CFrame = CFrame.new(dwCamera.CFrame.Position, c:WaitForChild("Head").Position)
-                        fireGun = not fireGun
-                        Client.Combat.FIRERATE = not Client.Combat.FIRERATE
+                        fireGun()
                     until v.Character:FindFirstChild("HumanoidRootPart").Position.Y < -300 or not Client.Combat.AUTOFARM or v.Team == dwLocalPlayer.Team
-                    fireGun = false
-                    Client.Combat.FIRERATE = false
                 end)
                 
             end
