@@ -308,6 +308,7 @@ local function esp(p,cr)
             else
                 text.Visible = false
                 square.Visible = false
+                line.Visible = false
                 triangle.Visible = false
             end
         end
