@@ -467,7 +467,8 @@ function notify(title,text)
 	OrionLib:MakeNotification({
         Name = title,
         Content = text,
-        Time = 2.5
+        Time = 2.5,
+        Image = "rbxassetid://7240801348",
     })
 end
 
