@@ -402,7 +402,7 @@ if Request("mode") then
     addString = " | Dev Mode"
 end
 
-local win = OrionLib:MakeWindow({Name = "Grimware".. addString, HidePremium = not Request("mode"), SaveConfig = true, ConfigFolder = "Grimware", IntroText="Grimware".. addString})
+local win = OrionLib:MakeWindow({Name = "Grimware".. addString, HidePremium = Request("mode"), SaveConfig = true, ConfigFolder = "Grimware", IntroText="Grimware".. addString})
 
 local Main = win:MakeTab({
 	Name = "Main",
@@ -422,7 +422,7 @@ local Movement = win:MakeTab({
 	Name = "Movement",
 	PremiumOnly = false
 })
-local Character = win:MakeTab({
+local Premium = win:MakeTab({
 	Name = "Character",
 	PremiumOnly = false
 })
@@ -447,8 +447,9 @@ local GunModsSection = GunMods:AddSection({
 local MovementSection = Movement:AddSection({
 	Name = "Movement"
 })
-local CharacterSection = Character:AddSection({
-	Name = "Character"
+local PremiumSection = Premium:AddSection({
+	Name = "Character",
+    PremiumOnly = true
 })
 local RenderSection = Render:AddSection({
 	Name = "Render"
@@ -865,10 +866,10 @@ GunModsSection:AddToggle({
 	end    
 })
 
--- Character
+-- PremiumSection
 
 
-CharacterSection:AddToggle({
+PremiumSection:AddToggle({
 	Name = "AutoFarm",
     Flag = "aFarm",
 	Default = false,
