@@ -398,11 +398,11 @@ end)
 
 local addString = ""
 
-if Client.DEV_MODE then
+if Request("mode") then
     addString = " | Dev Mode"
 end
 
-local win = OrionLib:MakeWindow({Name = "Grimware".. addString, HidePremium = not Client.DEV_MODE, SaveConfig = true, ConfigFolder = "Grimware", IntroText="Grimware".. addString})
+local win = OrionLib:MakeWindow({Name = "Grimware".. addString, HidePremium = not Request("mode"), SaveConfig = true, ConfigFolder = "Grimware", IntroText="Grimware".. addString})
 
 local Main = win:MakeTab({
 	Name = "Main",
