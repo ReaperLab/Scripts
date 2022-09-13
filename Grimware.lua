@@ -893,7 +893,7 @@ FarmSection:AddToggle({
                         require(game.Players.LocalPlayer.PlayerGui.GUI.Client.Functions.Weapons).firebullet()
                         wait()
                         
-                    until v.Character:FindFirstChild("HumanoidRootPart").Position.Y < -300 or not Client.Combat.AUTOFARM or v.Team == dwLocalPlayer.Team
+                    until v.Character:FindFirstChild("HumanoidRootPart").Position.Y < -300 or not Client.Combat.AUTOFARM
                 end)
                 
             end
