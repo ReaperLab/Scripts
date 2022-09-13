@@ -850,7 +850,10 @@ sec2:AddToggle({
     Save = true,
 	Callback = function(t)
 		Client.Combat.AUTOFARM = t
-
+        
+        local orbit_step = 0
+        local orbit_radius = 8;
+        local speed = 1/80
         while Client.Combat.AUTOFARM do
             for _,v in pairs(dwEntities:GetChildren()) do
                 pcall(function()
@@ -859,13 +862,20 @@ sec2:AddToggle({
                     end
                     local c = v.Character
                     repeat
-                        dwLocalPlayer.Character:WaitForChild("HumanoidRootPart").CFrame = c:WaitForChild("HumanoidRootPart").CFrame + Vector3.new(math.random(-8,8),math.random(-4,4),math.random(-8,8))
-                        dwLocalPlayer.Character:WaitForChild("HumanoidRootPart").Velocity = Vector3.new(0,0,0)
+                        
+                        local circle_x = math.sin((orbit_step+(3.14))*speed)*orbit_radius
+                        local circle_y = math.cos((orbit_step+(3.14))*speed)*orbit_radius
+                
+                        local player_cframe = v.Character.Humanoid.RootPart.CFrame
+                        player_cframe = player_cframe+ Vector3.new(circle_x,0,circle_y)
+                    
+                        dwLocalPlayer.Character.Humanoid.RootPart.CFrame = CFrame.new(player_cframe.Position,t.Character.Humanoid.RootPart.Position)
+                        orbit_step = orbit_step + 1
                         wait()
                         dwCamera.CFrame = CFrame.new(dwCamera.CFrame.Position, c:WaitForChild("Head").Position)
                         require(game.Players.LocalPlayer.PlayerGui.GUI.Client.Functions.Weapons).firebullet()
                         wait(0.1)
-                    until v.Character:FindFirstChild("HumanoidRootPart").Position.Y < -300 or not Client.Combat.AUTOFARM
+                    until v.Character:FindFirstChild("HumanoidRootPart").Position.Y < -300 or not Client.Combat.AUTOFARM or v.Team == dwLocalPlayer.Team
                 end)
                 
             end
@@ -875,6 +885,16 @@ sec2:AddToggle({
 })
 
 -- Render
+
+sec3:AddColorpicker({
+	Name = "GUI Color",
+    Flag = "guiColor",
+    Save = true,
+	Default = Color3.fromRGB(254, 61, 61),
+	Callback = function(Value)
+		Client.Render.GUICOLOR = Value
+	end	  
+})
 
 sec3:AddColorpicker({
 	Name = "ESP Color",
@@ -954,18 +974,8 @@ sec3:AddToggle({
 	Default = true,
 	Callback = function(t)
 		Client.Render.NOTIFY = t
-	end    
+	end   
 })
-
-function detectHackers(p)
-    if table.find(hackers, p) then
-        return
-    end
-    if (p.Character:FindFirstChild("HumanoidRootPart").Velocity.X > 45 or p.Character:FindFirstChild("HumanoidRootPart").Velocity.Z > 45) and p.Character:FindFirstChild("Humanoid").FloorMaterial ~= Enum.FloorMaterial.Air then
-        notify("Hacker Detected", p.Name.. " Velocity > 25 on ground")
-        hackers.insert(p)
-    end
-end
 
 
 local dev = st:AddLabel("Dev Mode: OFF")
@@ -978,7 +988,11 @@ spawn(function()
         if Client.Combat.AUTOFARM and not dwAlive then
             AutoSpawn()
         end
-        
+        pcall(function()
+            dev:Set("Dev Mode: ".. tostring(Request("mode")))
+            ping:Set("Ping: ".. tostring(Request("ping")))
+            fps:Set("FPS: ".. tostring(Request("fps")))
+        end)
     end
 end)
 
@@ -987,24 +1001,5 @@ spawn(function()
         if fireGun and Client.Combat.FIRERATE then
             require(game.Players.LocalPlayer.PlayerGui.GUI.Client.Functions.Weapons).firebullet()
         end
-    end
-end)
-
-spawn(function()
-    while wait() do
-        for _,v in pairs(dwEntities:GetPlayers()) do
-            detectHackers(v)
-        end
-        wait(0.1)
-    end
-end)
-
-spawn(function()
-    while wait(1) do
-        pcall(function()
-            dev:Set("Dev Mode: ".. tostring(Request("mode")))
-            ping:Set("Ping: ".. tostring(Request("ping")))
-            fps:Set("FPS: ".. tostring(Request("fps")))
-        end)
     end
 end)
