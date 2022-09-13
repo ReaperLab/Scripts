@@ -857,7 +857,7 @@ sec2:AddToggle({
         
         local orbit_step = 0
         local orbit_radius = 8;
-        local speed = 1/2
+        local speed = 1/5
         while Client.Combat.AUTOFARM do
             for _,v in pairs(dwEntities:GetChildren()) do
                 pcall(function()
@@ -873,7 +873,7 @@ sec2:AddToggle({
                         local player_cframe = v.Character.Humanoid.RootPart.CFrame
                         player_cframe = player_cframe+ Vector3.new(circle_x,4,circle_y)
                     
-                        dwLocalPlayer.Character.Humanoid.RootPart.CFrame = CFrame.new(player_cframe.Position,v.Character.Humanoid.Head.Position)
+                        dwLocalPlayer.Character.Humanoid.RootPart.CFrame = CFrame.new(player_cframe.Position,v.Character.Head.Position)
                         orbit_step = orbit_step + 1
                         wait()
                         dwCamera.CFrame = CFrame.new(dwCamera.CFrame.Position, c:WaitForChild("Head").Position)
