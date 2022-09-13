@@ -463,8 +463,6 @@ local m4 = MainSection:AddLabel("Added Gun Mods")
 
 
 function notify(title,text)
-    print("• "..title)
-    print("• "..text)
     if not Client.Render.NOTIFY then return end
 	OrionLib:MakeNotification({
         Name = title,
