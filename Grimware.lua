@@ -870,10 +870,10 @@ sec2:AddToggle({
                         local circle_x = math.sin((orbit_step+(3.14))*speed)*orbit_radius
                         local circle_y = math.cos((orbit_step+(3.14))*speed)*orbit_radius
                 
-                        local player_cframe = v.Character.Humanoid.RootPart.CFrame
-                        player_cframe = player_cframe+ Vector3.new(circle_x,4,circle_y)
+                        local player_cframe = c.HumanoidRootPart.CFrame
+                        player_cframe = player_cframe+ Vector3.new(circle_x,0,circle_y)
                     
-                        dwLocalPlayer.Character.Humanoid.RootPart.CFrame = CFrame.new(player_cframe.Position,v.Character.Head.Position)
+                        dwLocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(player_cframe.Position,c:WaitForChild("Head").Position)
                         orbit_step = orbit_step + 1
                         wait()
                         dwCamera.CFrame = CFrame.new(dwCamera.CFrame.Position, c:WaitForChild("Head").Position)
