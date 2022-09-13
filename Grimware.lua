@@ -877,6 +877,8 @@ sec2:AddToggle({
                     end
                     local c = v.Character
                     repeat
+                        dwLocalPlayer.Character.HumanoidRootPart.Velocity = Vector3(0, NumBypass, 0)
+                        dwLocalPlayer.Character.HumanoidRootPart.Velocity = Vector3(0, -NumBypass, 0)
                         local player_cframe =  v.Character:FindFirstChild("HumanoidRootPart").CFrame * CFrame.fromEulerAnglesXYZ(math.rad(0), 0, 0) * CFrame.new(0, 0, 6) + Vector3.new(0,math.random(-4,4),0)
                     
                         dwLocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(player_cframe.Position,c[Client.Combat.AIMBOT_SETTINGS.Aimbot_AimPart].Position)
