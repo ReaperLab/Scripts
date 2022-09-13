@@ -43,7 +43,7 @@ local Client = {
         LINEESP = false,
         ESP = false,
         BOXESP = false,
-        TRIESP = false,
+        CIRCESP = false,
         NOTIFY = false,
         ESPTEAMCHECK = true,
         ESPCOLOR = Color3.fromRGB(0, 255, 42),
@@ -203,7 +203,7 @@ local function esp(p,cr)
     square.Color = Client.Render.ESPCOLOR
     square.Thickness = 1
 
-    local triangle = Drawing.new("Triangle")
+    local triangle = Drawing.new("Circle")
     triangle.Visible = false
     triangle.Color = Client.Render.ESPCOLOR
     triangle.Thickness = 1
@@ -285,9 +285,7 @@ local function esp(p,cr)
                 square.Size = Vector2.new(width, height);
                 square.Position = Vector2.new(floor(x - width * 0.5), floor(y - height * 0.5));
 
-                triangle.PointA = Vector2.new(headPos.X,headPos.Y)
-                triangle.PointB = Vector2.new(rightFootPos.X,rightFootPos.Y)
-                triangle.PointC = Vector2.new(leftFootPos.X,leftFootPos.Y)
+                triangle.Position = Vector2.new(headPos.X,headPos.Y)
                 if Client.Render.LINEESP then
                     line.Visible = true
                 end
@@ -316,7 +314,7 @@ local function esp(p,cr)
 		if not Client.Render.BOXESP then
 			square.Visible = false
 		end
-        if not Client.Render.TRIESP then
+        if not Client.Render.CIRCESP then
             triangle.Visible = false
         end
     end)
@@ -400,62 +398,62 @@ end
 
 local win = OrionLib:MakeWindow({Name = "Grimware".. addString, HidePremium = not Request("mode"), SaveConfig = true, ConfigFolder = "Grimware", IntroText="Grimware".. addString})
 
-local tab = win:MakeTab({
+local Main = win:MakeTab({
 	Name = "Main",
 	PremiumOnly = false
 })
 
 
-local tab2 = win:MakeTab({
+local Combat = win:MakeTab({
 	Name = "Combat",
 	PremiumOnly = false
 })
-local tabG = win:MakeTab({
+local GunMods = win:MakeTab({
 	Name = "Gun Mods",
 	PremiumOnly = false
 })
-local tab3 = win:MakeTab({
+local Movement = win:MakeTab({
 	Name = "Movement",
 	PremiumOnly = false
 })
-local tab4 = win:MakeTab({
+local Character = win:MakeTab({
 	Name = "Character",
 	PremiumOnly = false
 })
-local tab5 = win:MakeTab({
+local Render = win:MakeTab({
 	Name = "Render",
 	PremiumOnly = false
 })
-local statsTab = win:MakeTab({
+local Stats = win:MakeTab({
 	Name = "Stats",
 	PremiumOnly = false
 })
 
-local secM = tab:AddSection({
+local MainSection = Main:AddSection({
 	Name = "Version 0.5.4"
 })
-local sec = tab2:AddSection({
+local CombatSection = Combat:AddSection({
 	Name = "Combat"
 })
-local secG = tabG:AddSection({
+local GunModsSection = GunMods:AddSection({
 	Name = "Gun Mods"
 })
-local sec1 = tab3:AddSection({
+local MovementSection = Movement:AddSection({
 	Name = "Movement"
 })
-local sec2 = tab4:AddSection({
+local CharacterSection = Character:AddSection({
 	Name = "Character"
 })
-local sec3 = tab5:AddSection({
+local RenderSection = Render:AddSection({
 	Name = "Render"
 })
-local st = statsTab:AddSection({
+local StatsSection = Stats:AddSection({
 	Name = "Stats"
 })
 
-local m2 = secM:AddLabel("Added Stats Tab")
-local m3 = secM:AddLabel("Fixed Aimbot WallCheck")
-local m4 = secM:AddLabel("Added Gun Mods")
+local m2 = MainSection:AddLabel("Added Stats Tab")
+local m3 = MainSection:AddLabel("Fixed Aimbot WallCheck")
+local m4 = MainSection:AddLabel("Added Gun Mods")
 
 
 function notify(title,text)
@@ -478,7 +476,7 @@ end)
 
 -- Combat
 
-sec:AddToggle({
+CombatSection:AddToggle({
 	Name = "Aimbot",
 	Default = false,
     Flag = "aimbot",
@@ -488,7 +486,7 @@ sec:AddToggle({
 	end    
 })
 
-sec:AddToggle({
+CombatSection:AddToggle({
 	Name = "Wallbang",
 	Default = false,
     Flag = "wallbang",
@@ -498,7 +496,7 @@ sec:AddToggle({
 	end    
 })
 
-sec:AddToggle({
+CombatSection:AddToggle({
 	Name = "Teamcheck",
     Flag = "TCaimbot",
 	Default = true,
@@ -508,7 +506,7 @@ sec:AddToggle({
 	end    
 })
 
-sec:AddToggle({
+CombatSection:AddToggle({
 	Name = "WallCheck",
     Flag = "WCaimbot",
 	Default = true,
@@ -518,7 +516,7 @@ sec:AddToggle({
 	end    
 })
 
-sec:AddDropdown({
+CombatSection:AddDropdown({
 	Name = "Aim Part",
 	Default = "Head",
 	Options = {"Head", "UpperTorso", "LowerTorso"},
@@ -528,7 +526,7 @@ sec:AddDropdown({
 })
 
 
-sec:AddSlider({
+CombatSection:AddSlider({
 	Name = "Aimbot Sens (Higher is slower)",
     Flag = "aimSens",
     Save = true,
@@ -543,7 +541,7 @@ sec:AddSlider({
 	end    
 })
 
-sec:AddSlider({
+CombatSection:AddSlider({
 	Name = "Aimbot OffSet",
     Flag = "aimbotOff",
     Save = true,
@@ -559,7 +557,7 @@ sec:AddSlider({
 })
 
 
-sec:AddSlider({
+CombatSection:AddSlider({
 	Name = "FOV",
     Flag = "aimbotFOV",
     Save = true,
@@ -576,7 +574,7 @@ sec:AddSlider({
 
 -- Movement
 
-sec1:AddBind({
+MovementSection:AddBind({
 	Name = "Fly",
     Flag = "fly",
     Save = true,
@@ -604,7 +602,9 @@ sec1:AddBind({
                         dwLocalPlayer.Character:WaitForChild("HumanoidRootPart").Velocity = Vector3.new(0,NumBypass+_G.FB,0)
                     end
                 else
-                    dwLocalPlayer.Character:WaitForChild("HumanoidRootPart").Velocity = Vector3.new(0,0,0)
+                    if not lastD then
+                        dwLocalPlayer.Character:WaitForChild("HumanoidRootPart").Velocity = Vector3.new(0,0,0)
+                    end
                 end
 
                 lastD = not lastD
@@ -615,7 +615,7 @@ sec1:AddBind({
 })
 
 
-sec1:AddBind({
+MovementSection:AddBind({
 	Name = "Bhop",
     Flag = "bhop",
     Save = true,
@@ -646,7 +646,7 @@ sec1:AddBind({
 	end
 })
 
-sec1:AddBind({
+MovementSection:AddBind({
 	Name = "Launch",
 	Default = Enum.KeyCode.Z,
     Flag = "launch",
@@ -674,7 +674,7 @@ sec1:AddBind({
 	end    
 })
 
-sec1:AddToggle({
+MovementSection:AddToggle({
 	Name = "Fly Bounce",
     Flag = "flyBounce",
     Save = true,
@@ -684,7 +684,7 @@ sec1:AddToggle({
 	end   
 })
 
-sec1:AddSlider({
+MovementSection:AddSlider({
 	Name = "Fly Speed",
     Flag = "flySpeed",
     Save = true,
@@ -699,7 +699,7 @@ sec1:AddSlider({
 	end    
 })
 
-sec1:AddSlider({
+MovementSection:AddSlider({
 	Name = "Fly Bounce",
     Flag = "flyBounce",
     Save = true,
@@ -714,7 +714,7 @@ sec1:AddSlider({
 	end    
 })
 
-sec1:AddToggle({
+MovementSection:AddToggle({
 	Name = "Bhop Jump",
     Flag = "bhopJump",
     Save = true,
@@ -724,7 +724,7 @@ sec1:AddToggle({
 	end
 })
 
-sec1:AddSlider({
+MovementSection:AddSlider({
 	Name = "Bhop Speed",
     Flag = "bhopSpeed",
     Save = true,
@@ -739,7 +739,7 @@ sec1:AddSlider({
 	end    
 })
 
-sec1:AddSlider({
+MovementSection:AddSlider({
 	Name = "Bhop Fall Speed",
     Flag = "bhopFallSpeed",
     Save = true,
@@ -754,7 +754,7 @@ sec1:AddSlider({
 	end    
 })
 
-sec1:AddSlider({
+MovementSection:AddSlider({
 	Name = "Bhop Jump Velocity",
     Flag = "bhopJumpVel",
     Save = true,
@@ -769,7 +769,7 @@ sec1:AddSlider({
 	end    
 })
 
-sec1:AddSlider({
+MovementSection:AddSlider({
 	Name = "Launch Speed",
     Flag = "bhopJumpVel",
     Save = true,
@@ -786,7 +786,7 @@ sec1:AddSlider({
 
 -- Gun Mods
 
-secG:AddToggle({
+GunModsSection:AddToggle({
 	Name = "Firerate",
 	Default = false,
     Flag = "firerate",
@@ -798,7 +798,7 @@ secG:AddToggle({
 	end    
 })
 
-secG:AddToggle({
+GunModsSection:AddToggle({
 	Name = "Backstab Only",
 	Default = false,
     Flag = "bstab",
@@ -809,7 +809,7 @@ secG:AddToggle({
 })
 
 
-secG:AddToggle({
+GunModsSection:AddToggle({
 	Name = "Inf Kniferange",
 	Default = false,
     Flag = "Kniferange",
@@ -825,7 +825,7 @@ secG:AddToggle({
 	end    
 })
 
-secG:AddToggle({
+GunModsSection:AddToggle({
 	Name = "Instant Reload",
 	Default = false,
     Flag = "Kniferange",
@@ -849,7 +849,7 @@ secG:AddToggle({
 	end    
 })
 
-secG:AddToggle({
+GunModsSection:AddToggle({
 	Name = "Infinite Ammo",
 	Default = false,
     Flag = "infammo",
@@ -862,7 +862,7 @@ secG:AddToggle({
 -- Character
 
 
-sec2:AddToggle({
+CharacterSection:AddToggle({
 	Name = "AutoFarm",
     Flag = "aFarm",
 	Default = false,
@@ -898,7 +898,7 @@ sec2:AddToggle({
 
 -- Render
 
-sec3:AddColorpicker({
+RenderSection:AddColorpicker({
 	Name = "Team ESP Color",
     Flag = "TeamespColor",
     Save = true,
@@ -908,7 +908,7 @@ sec3:AddColorpicker({
 	end	  
 })
 
-sec3:AddColorpicker({
+RenderSection:AddColorpicker({
 	Name = "ESP Color",
     Flag = "espColor",
     Save = true,
@@ -918,7 +918,7 @@ sec3:AddColorpicker({
 	end	  
 })
 
-sec3:AddToggle({
+RenderSection:AddToggle({
 	Name = "FOV Circle",
     Flag = "fovCircle",
     Save = true,
@@ -928,7 +928,7 @@ sec3:AddToggle({
 	end   
 })
 
-sec3:AddToggle({
+RenderSection:AddToggle({
 	Name = "NameTag ESP",
     Save = true,
     Flag = "nametagESP",
@@ -938,7 +938,7 @@ sec3:AddToggle({
 	end    
 })
 
-sec3:AddToggle({
+RenderSection:AddToggle({
 	Name = "Box ESP",
     Flag = "boxESP",
     Save = true,
@@ -948,17 +948,17 @@ sec3:AddToggle({
 	end    
 })
 
-sec3:AddToggle({
-	Name = "Triangle ESP",
-    Flag = "triangleESP",
+RenderSection:AddToggle({
+	Name = "Circle ESP",
+    Flag = "circlesESP",
     Save = true,
 	Default = false,
 	Callback = function(t)
-		Client.Render.TRIESP = t
+		Client.Render.CIRCESP = t
 	end    
 })
 
-sec3:AddToggle({
+RenderSection:AddToggle({
 	Name = "Tracers",
     Flag = "tracersESP",
     Save = true,
@@ -968,7 +968,7 @@ sec3:AddToggle({
 	end    
 })
 
-sec3:AddToggle({
+RenderSection:AddToggle({
 	Name = "Notifications",
     Flag = "notify",
     Save = true,
@@ -979,9 +979,9 @@ sec3:AddToggle({
 })
 
 
-local dev = st:AddLabel("Dev Mode: OFF")
-local ping = st:AddLabel("Ping: INF")
-local fps = st:AddLabel("FPS: 0")
+local dev = StatsSection:AddLabel("Dev Mode: OFF")
+local ping = StatsSection:AddLabel("Ping: INF")
+local fps = StatsSection:AddLabel("FPS: 0")
 
 spawn(function()
     while wait() do
