@@ -853,7 +853,7 @@ sec2:AddToggle({
         
         local orbit_step = 0
         local orbit_radius = 8;
-        local speed = 1/80
+        local speed = 1/5
         while Client.Combat.AUTOFARM do
             for _,v in pairs(dwEntities:GetChildren()) do
                 pcall(function()
