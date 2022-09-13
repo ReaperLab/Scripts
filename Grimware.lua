@@ -859,6 +859,7 @@ sec2:AddToggle({
         local orbit_radius = 8;
         local speed = 1/5
         while Client.Combat.AUTOFARM do
+            orbit_step = 0
             for _,v in pairs(dwEntities:GetChildren()) do
                 pcall(function()
                     if not v.Character and not v.Character:FindFirstChild("Humanoid") and v.Character.Humanoid.Health == 0 and not v.Character:FindFirstChild("HumanoidRootPart") or v == dwLocalPlayer or v.Team == dwLocalPlayer.Team then
@@ -878,7 +879,7 @@ sec2:AddToggle({
                         wait()
                         dwCamera.CFrame = CFrame.new(dwCamera.CFrame.Position, c:WaitForChild("Head").Position)
                         fireGun()
-                    until v.Character:FindFirstChild("HumanoidRootPart").Position.Y < -300 or not Client.Combat.AUTOFARM or v.Team == dwLocalPlayer.Team
+                    until v.Character:FindFirstChild("HumanoidRootPart").Position.Y < -300 or not Client.Combat.AUTOFARM
                 end)
                 
             end
