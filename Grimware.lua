@@ -207,6 +207,9 @@ local function esp(p,cr)
     triangle.Visible = false
     triangle.Color = Client.Render.ESPCOLOR
     triangle.Thickness = 1
+	triangle.Radius = 5
+	triangle.Thickness = 1
+	triangle.Filled = false
 
     local c1
     local c2
@@ -257,7 +260,10 @@ local function esp(p,cr)
             local rightFootPos, visible = dwCamera:WorldToViewportPoint(cr:WaitForChild("RightFoot").Position);
             local leftFootPos, visible = dwCamera:WorldToViewportPoint(cr:WaitForChild("LeftFoot").Position);
             local scale_factor = 1 / (position.Z * tan(rad(dwCamera.FieldOfView * 0.5)) * 2) * 100;
+            local scale_factorH = 1 / (headPos.Z * tan(rad(dwCamera.FieldOfView * 0.5)) * 2) * 100;
+            
             local width, height = floor(35 * scale_factor), floor(50 * scale_factor);
+            local v = floor(5 * scale_factorH)
             local x, y = floor(position.X), floor(position.Y);
             if p.Team == dwLocalPlayer.Team then
                 text.Color = Client.Render.TEAMESPCOLOR
@@ -286,6 +292,7 @@ local function esp(p,cr)
                 square.Position = Vector2.new(floor(x - width * 0.5), floor(y - height * 0.5));
 
                 triangle.Position = Vector2.new(headPos.X,headPos.Y)
+                triangle.Radius = v
                 if Client.Render.LINEESP then
                     line.Visible = true
                 end
@@ -295,13 +302,12 @@ local function esp(p,cr)
                 if Client.Render.BOXESP then
                     square.Visible = true
                 end
-                if Client.Render.TRIESP then
+                if Client.Render.CIRCESP then
                     triangle.Visible = true
                 end
             else
                 text.Visible = false
                 square.Visible = false
-                line.Visible = false
                 triangle.Visible = false
             end
         end
