@@ -869,7 +869,7 @@ sec2:AddToggle({
                         local player_cframe = v.Character.Humanoid.RootPart.CFrame
                         player_cframe = player_cframe+ Vector3.new(circle_x,0,circle_y)
                     
-                        dwLocalPlayer.Character.Humanoid.RootPart.CFrame = CFrame.new(player_cframe.Position,t.Character.Humanoid.RootPart.Position)
+                        dwLocalPlayer.Character.Humanoid.RootPart.CFrame = CFrame.new(player_cframe.Position,v.Character.Humanoid.RootPart.Position)
                         orbit_step = orbit_step + 1
                         wait()
                         dwCamera.CFrame = CFrame.new(dwCamera.CFrame.Position, c:WaitForChild("Head").Position)
