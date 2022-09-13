@@ -866,7 +866,7 @@ sec2:AddToggle({
                         wait()
                         dwCamera.CFrame = CFrame.new(dwCamera.CFrame.Position, c:WaitForChild("Head").Position)
                         require(game.Players.LocalPlayer.PlayerGui.GUI.Client.Functions.Weapons).firebullet()
-                        wait(0.25)
+                        wait(0.1)
                         
                     until v.Character:FindFirstChild("HumanoidRootPart").Position.Y < -300 or not Client.Combat.AUTOFARM
                 end)
