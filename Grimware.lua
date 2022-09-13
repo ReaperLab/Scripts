@@ -46,7 +46,8 @@ local Client = {
         TRIESP = false,
         NOTIFY = false,
         ESPTEAMCHECK = true,
-        ESPCOLOR = Color3.fromRGB(0, 255, 42)
+        ESPCOLOR = Color3.fromRGB(0, 255, 42),
+        TEAMESPCOLOR = Color3.fromRGB(0, 204, 255)
     }
 }
 
@@ -247,9 +248,7 @@ local function esp(p,cr)
     end)
 
     c1 = dwRunService.RenderStepped:Connect(function()
-        if Client.Render.ESPTEAMCHECK == true and
-                p.Team ~= dwLocalPlayer.Team or
-                Client.Render.ESPTEAMCHECK == false then
+        if true then
             local hrp_pos,hrp_onscreen = dwCamera:WorldToViewportPoint(hrp.Position)
             local p_root_pos, p_onscreen = dwCamera:WorldToViewportPoint(dwLocalPlayer.Character:WaitForChild("HumanoidRootPart").Position)
             local cframe = get_pivot(cr);
@@ -260,10 +259,18 @@ local function esp(p,cr)
             local scale_factor = 1 / (position.Z * tan(rad(dwCamera.FieldOfView * 0.5)) * 2) * 100;
             local width, height = floor(35 * scale_factor), floor(50 * scale_factor);
             local x, y = floor(position.X), floor(position.Y);
-            text.Color = Client.Render.ESPCOLOR
-            square.Color = Client.Render.ESPCOLOR
-            line.Color = Client.Render.ESPCOLOR
-            triangle.Color = Client.Render.ESPCOLOR
+            if p.Team == dwLocalPlayer.Team then
+                text.Color = Client.Render.TEAMESPCOLOR
+                square.Color = Client.Render.TEAMESPCOLOR
+                line.Color = Client.Render.TEAMESPCOLOR
+                triangle.Color = Client.Render.TEAMESPCOLOR
+            else
+                text.Color = Client.Render.ESPCOLOR
+                square.Color = Client.Render.ESPCOLOR
+                line.Color = Client.Render.ESPCOLOR
+                triangle.Color = Client.Render.ESPCOLOR
+            end
+            
             if hrp_onscreen and hrp.Position.Y > -300 then
                 line.From = Vector2.new(p_root_pos.X, p_root_pos.Y)
                 line.To = Vector2.new(hrp_pos.X, floor(y - height * 0.5)+25)
@@ -525,6 +532,16 @@ sec:AddSlider({
 		Client.Combat.LOOKSENS = 1/t
 	end    
 })
+
+sec:AddDropdown({
+	Name = "Aim Part",
+	Default = "Head",
+	Options = {"Head", "UpperTorso", "LowerTorso"},
+	Callback = function(Value)
+		Client.Combat.AIMBOT_SETTINGS.Aimbot_AimPart = Value
+	end
+})
+
 
 sec:AddSlider({
 	Name = "Aimbot OffSet",
@@ -880,12 +897,12 @@ sec2:AddToggle({
 -- Render
 
 sec3:AddColorpicker({
-	Name = "GUI Color",
-    Flag = "guiColor",
+	Name = "Team ESP Color",
+    Flag = "TeamespColor",
     Save = true,
-	Default = Color3.fromRGB(254, 61, 61),
+	Default = Color3.fromRGB(0, 204, 255),
 	Callback = function(Value)
-		Client.Render.GUICOLOR = Value
+		Client.Render.TEAMESPCOLOR = Value
 	end	  
 })
 
@@ -893,7 +910,7 @@ sec3:AddColorpicker({
 	Name = "ESP Color",
     Flag = "espColor",
     Save = true,
-	Default = Color3.fromRGB(0, 255, 42),
+	Default = Color3.fromRGB(255, 0, 38),
 	Callback = function(Value)
 		Client.Render.ESPCOLOR = Value
 	end	  
@@ -906,17 +923,6 @@ sec3:AddToggle({
 	Default = true,
 	Callback = function(t)
 		Client.Combat.AIMBOT_SETTINGS.Aimbot_Draw_FOV = t
-	end   
-})
-
-
-sec3:AddToggle({
-	Name = "Teamcheck",
-    Flag = "TCesp",
-    Save = true,
-	Default = true,
-	Callback = function(t)
-		Client.Render.ESPTEAMCHECK = t
 	end   
 })
 
