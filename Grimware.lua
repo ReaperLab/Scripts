@@ -336,7 +336,7 @@ local function p_added(p)
 end
 
 for i,p in next, dwEntities:GetPlayers() do
-    if p ~= lp then
+    if p ~= dwLocalPlayer then
         p_added(p)
     end
 end
