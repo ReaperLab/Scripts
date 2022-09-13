@@ -843,7 +843,8 @@ secG:AddToggle({
 
 -- Character
 
-function fireGun()
+function fireGun(c)
+    dwCamera.CFrame = CFrame.new(dwCamera.CFrame.Position, c:WaitForChild("Head").Position)
     require(game.Players.LocalPlayer.PlayerGui.GUI.Client.Functions.Weapons).firebullet()
 end
 
@@ -876,9 +877,8 @@ sec2:AddToggle({
                     
                         dwLocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(player_cframe.Position,c:WaitForChild("Head").Position)
                         orbit_step = orbit_step + 1
-                        wait()
-                        dwCamera.CFrame = CFrame.new(dwCamera.CFrame.Position, c:WaitForChild("Head").Position)
-                        fireGun()
+                        wait(0.03)
+                        fireGun(c)
                     until v.Character:FindFirstChild("HumanoidRootPart").Position.Y < -300 or not Client.Combat.AUTOFARM
                 end)
                 
