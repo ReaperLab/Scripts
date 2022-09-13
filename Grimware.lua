@@ -469,7 +469,7 @@ function notify(title,text)
         Name = title,
         Content = text,
         Time = 2.5,
-        Image = "rbxassetid://7240801348",
+        Image = "rbxassetid://4458859457",
     })
 end
 
