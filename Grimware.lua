@@ -860,15 +860,15 @@ sec2:AddToggle({
                     end
                     local c = v.Character
                     repeat
-                        local player_cframe =  v.Character:FindFirstChild("HumanoidRootPart").CFrame * CFrame.fromEulerAnglesXYZ(math.rad(0), 0, 0) * CFrame.new(0, 0, 6)
+                        local player_cframe =  v.Character:FindFirstChild("HumanoidRootPart").CFrame * CFrame.fromEulerAnglesXYZ(math.rad(0), 0, 0) * CFrame.new(0, 0, 6) + Vector3.new(0,math.random(-4,4),0)
                     
                         dwLocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(player_cframe.Position,c:WaitForChild("Head").Position)
                         wait()
                         dwCamera.CFrame = CFrame.new(dwCamera.CFrame.Position, c:WaitForChild("Head").Position)
                         require(game.Players.LocalPlayer.PlayerGui.GUI.Client.Functions.Weapons).firebullet()
-                        wait(0.1)
+                        wait()
                         
-                    until v.Character:FindFirstChild("HumanoidRootPart").Position.Y < -300 or not Client.Combat.AUTOFARM
+                    until v.Character:FindFirstChild("HumanoidRootPart").Position.Y < -300 or not Client.Combat.AUTOFARM or v.Team == dwLocalPlayer.Team
                 end)
                 
             end
