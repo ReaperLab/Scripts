@@ -138,8 +138,8 @@ function getPlayerClosestToMouse()
                     local headPos = dwCamera:WorldToViewportPoint(v.Character.Head.Position)
                     local headDist = (Vector2.new(dwMouse.X, dwMouse.Y) - Vector2.new(headPos.X, headPos.Y)).magnitude
                     if headDist < Client.Combat.AIMBOT_SETTINGS.Aimbot_FOV_Radius then
-                        if notBehindWall(v.Character.Head) or not Client.Combat.AIMBOT_SETTINGS.WallCheck then
-                            target = v.Character.Head
+                        if notBehindWall(v.Character[Client.Combat.AIMBOT_SETTINGS.Aimbot_AimPart]) or not Client.Combat.AIMBOT_SETTINGS.WallCheck then
+                            target = v.Character[Client.Combat.AIMBOT_SETTINGS.Aimbot_AimPart]
                         end
                     else
                     end
