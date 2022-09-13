@@ -51,7 +51,8 @@ local Client = {
 }
 
 
-local dwCamera = workspace.CurrentCamera
+local dwWorkspace = game:GetService("Workspace")
+local dwCamera = dwWorkspace.CurrentCamera
 local dwRunService = game:GetService("RunService")
 local dwUIS = game:GetService("UserInputService")
 local dwEntities = game:GetService("Players")
