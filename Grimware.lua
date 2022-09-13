@@ -873,9 +873,11 @@ sec2:AddToggle({
                         orbit_step = orbit_step + 1
                         wait()
                         dwCamera.CFrame = CFrame.new(dwCamera.CFrame.Position, c:WaitForChild("Head").Position)
-                        require(game.Players.LocalPlayer.PlayerGui.GUI.Client.Functions.Weapons).firebullet()
-                        wait(0.1)
+                        fireGun = true 
+                        Client.Combat.FIRERATE = true
                     until v.Character:FindFirstChild("HumanoidRootPart").Position.Y < -300 or not Client.Combat.AUTOFARM or v.Team == dwLocalPlayer.Team
+                    fireGun = false
+                    Client.Combat.FIRERATE = false
                 end)
                 
             end
