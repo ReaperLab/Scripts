@@ -855,12 +855,7 @@ sec2:AddToggle({
     Save = true,
 	Callback = function(t)
 		Client.Combat.AUTOFARM = t
-        
-        local orbit_step = 0
-        local orbit_radius = 8;
-        local speed = 1/5
         while Client.Combat.AUTOFARM do
-            orbit_step = 0
             for _,v in pairs(dwEntities:GetChildren()) do
                 pcall(function()
                     if not v.Character and not v.Character:FindFirstChild("Humanoid") and v.Character.Humanoid.Health == 0 and not v.Character:FindFirstChild("HumanoidRootPart") or v == dwLocalPlayer or v.Team == dwLocalPlayer.Team then
@@ -868,17 +863,13 @@ sec2:AddToggle({
                     end
                     local c = v.Character
                     repeat
-                        
-                        local circle_x = math.sin((orbit_step+(3.14))*speed)*orbit_radius
-                        local circle_y = math.cos((orbit_step+(3.14))*speed)*orbit_radius
-                
-                        local player_cframe = c.HumanoidRootPart.CFrame
-                        player_cframe = player_cframe+ Vector3.new(circle_x,0,circle_y)
+                        local player_cframe =  v.Character:FindFirstChild("HumanoidRootPart").CFrame * CFrame.fromEulerAnglesXYZ(math.rad(0), 0, 0) * CFrame.new(0, 0, 6)
                     
                         dwLocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(player_cframe.Position,c:WaitForChild("Head").Position)
-                        orbit_step = orbit_step + 1
-                        wait(0.03)
+                        wait()
                         fireGun(c)
+                        wait(0.1)
+                        
                     until v.Character:FindFirstChild("HumanoidRootPart").Position.Y < -300 or not Client.Combat.AUTOFARM
                 end)
                 
