@@ -879,9 +879,9 @@ sec2:AddToggle({
                     repeat
                         local player_cframe =  v.Character:FindFirstChild("HumanoidRootPart").CFrame * CFrame.fromEulerAnglesXYZ(math.rad(0), 0, 0) * CFrame.new(0, 0, 6) + Vector3.new(0,math.random(-4,4),0)
                     
-                        dwLocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(player_cframe.Position,c:WaitForChild("Head").Position)
+                        dwLocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(player_cframe.Position,c[Client.Combat.AIMBOT_SETTINGS.Aimbot_AimPart].Position)
                         wait()
-                        dwCamera.CFrame = CFrame.new(dwCamera.CFrame.Position, c:WaitForChild("Head").Position)
+                        dwCamera.CFrame = CFrame.new(dwCamera.CFrame.Position, c[Client.Combat.AIMBOT_SETTINGS.Aimbot_AimPart].Position)
                         require(game.Players.LocalPlayer.PlayerGui.GUI.Client.Functions.Weapons).firebullet()
                         wait()
                         
