@@ -5,7 +5,7 @@ local H_G_DRGH_EHT_HDF_G_ERHY_ETRH_SDR_GFH_HD_FGH_DRETH_ETDRHDR_G_DTR_HJFTD_GH_D
 local NumBypass = (H_G_DRGH_EHT_HDF_G_ERHY_ETRH_SDR_GFH_HD_FGH_DRETH_ETDRHDR_G_DTR_HJFTD_GH_DSR_GHRT_JHT(0.5+0.2+0.3-(((((H_G_DRGH_EHT_HDF_G_ERHY_ETRH_SDR_GFH_HD_FGH_DRETH_ETDRHDR_G_DTR_HJFTD_GH_DSR_GHRT_JHT((((((-2.79999726635+0.3)*2)*10)/987654)*987654)/2)*2)/3456789876567483567824567)*3456789876567483567824567)/game.PlaceId)*game.PlaceId+1-0.5-0.2-0.3)-1)*2)/2
 
 local Client = {
-    DEV_MODE = false,
+    DEV_MODE = true,
     Movement = {
         B = true,
         FS = 25,
@@ -422,8 +422,8 @@ local Movement = win:MakeTab({
 	Name = "Movement",
 	PremiumOnly = false
 })
-local Premium = win:MakeTab({
-	Name = "Premium",
+local Farm = win:MakeTab({
+	Name = "Farm",
 	PremiumOnly = true
 })
 local Render = win:MakeTab({
@@ -447,8 +447,8 @@ local GunModsSection = GunMods:AddSection({
 local MovementSection = Movement:AddSection({
 	Name = "Movement"
 })
-local PremiumSection = Premium:AddSection({
-	Name = "Premium"
+local FarmSection = Farm:AddSection({
+	Name = "Farm"
 })
 local RenderSection = Render:AddSection({
 	Name = "Render"
@@ -865,10 +865,10 @@ GunModsSection:AddToggle({
 	end    
 })
 
--- PremiumSection
+-- FarmSection
 
 
-PremiumSection:AddToggle({
+FarmSection:AddToggle({
 	Name = "AutoFarm",
     Flag = "aFarm",
 	Default = false,
