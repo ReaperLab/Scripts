@@ -263,7 +263,7 @@ local function esp(p,cr)
             local scale_factorH = 1 / (headPos.Z * tan(rad(dwCamera.FieldOfView * 0.5)) * 2) * 100;
             
             local width, height = floor(35 * scale_factor), floor(50 * scale_factor);
-            local v = floor(5 * scale_factorH)
+            local v = floor(10 * scale_factorH)
             local x, y = floor(position.X), floor(position.Y);
             if p.Team == dwLocalPlayer.Team then
                 text.Color = Client.Render.TEAMESPCOLOR
