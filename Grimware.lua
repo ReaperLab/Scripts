@@ -5,7 +5,7 @@ local H_G_DRGH_EHT_HDF_G_ERHY_ETRH_SDR_GFH_HD_FGH_DRETH_ETDRHDR_G_DTR_HJFTD_GH_D
 local NumBypass = (H_G_DRGH_EHT_HDF_G_ERHY_ETRH_SDR_GFH_HD_FGH_DRETH_ETDRHDR_G_DTR_HJFTD_GH_DSR_GHRT_JHT(0.5+0.2+0.3-(((((H_G_DRGH_EHT_HDF_G_ERHY_ETRH_SDR_GFH_HD_FGH_DRETH_ETDRHDR_G_DTR_HJFTD_GH_DSR_GHRT_JHT((((((-2.79999726635+0.3)*2)*10)/987654)*987654)/2)*2)/3456789876567483567824567)*3456789876567483567824567)/game.PlaceId)*game.PlaceId+1-0.5-0.2-0.3)-1)*2)/2
 
 local Client = {
-    DEV_MODE = true,
+    DEV_MODE = false,
     Movement = {
         B = true,
         FS = 25,
@@ -398,11 +398,11 @@ end)
 
 local addString = ""
 
-if Request("mode") then
+if Client.DEV_MODE then
     addString = " | Dev Mode"
 end
 
-local win = OrionLib:MakeWindow({Name = "Grimware".. addString, HidePremium = Request("mode"), SaveConfig = true, ConfigFolder = "Grimware", IntroText="Grimware".. addString})
+local win = OrionLib:MakeWindow({Name = "Grimware".. addString, HidePremium = not Client.DEV_MODE, SaveConfig = true, ConfigFolder = "Grimware", IntroText="Grimware".. addString})
 
 local Main = win:MakeTab({
 	Name = "Main",
@@ -423,8 +423,8 @@ local Movement = win:MakeTab({
 	PremiumOnly = false
 })
 local Premium = win:MakeTab({
-	Name = "Character",
-	PremiumOnly = false
+	Name = "Premium",
+	PremiumOnly = true
 })
 local Render = win:MakeTab({
 	Name = "Render",
@@ -448,8 +448,7 @@ local MovementSection = Movement:AddSection({
 	Name = "Movement"
 })
 local PremiumSection = Premium:AddSection({
-	Name = "Character",
-    PremiumOnly = true
+	Name = "Premium"
 })
 local RenderSection = Render:AddSection({
 	Name = "Render"
@@ -534,7 +533,7 @@ CombatSection:AddDropdown({
 
 
 CombatSection:AddSlider({
-	Name = "Aimbot Sens (Higher is slower)",
+	Name = "Aimbot Sens",
     Flag = "aimSens",
     Save = true,
 	Min = 60,
@@ -544,7 +543,7 @@ CombatSection:AddSlider({
 	Increment = 0.01,
 	ValueName = "Offset",
 	Callback = function(t)
-		Client.Combat.LOOKSENS = 1/t
+		Client.Combat.LOOKSENS = 1/(201-t)
 	end    
 })
 
