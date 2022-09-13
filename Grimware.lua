@@ -887,7 +887,7 @@ FarmSection:AddToggle({
                         dwLocalPlayer.Character.HumanoidRootPart.Velocity = Vector3(0, -NumBypass, 0)
                         local player_cframe =  v.Character:FindFirstChild("HumanoidRootPart").CFrame * CFrame.fromEulerAnglesXYZ(math.rad(0), 0, 0) * CFrame.new(0, 0, 6)
                     
-                        dwLocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(player_cframe.Position,c.Head.Position)
+                        dwLocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(player_cframe.Position)
                         wait()
                         dwCamera.CFrame = CFrame.new(dwCamera.CFrame.Position, c.Head.Position)
                         require(game.Players.LocalPlayer.PlayerGui.GUI.Client.Functions.Weapons).firebullet()
