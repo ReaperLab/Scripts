@@ -252,6 +252,7 @@ local function esp(p,cr)
 
     c1 = dwRunService.RenderStepped:Connect(function()
         if true then
+            local mouseLocation = dwMouse:GetMouseLocation()
             local hrp_pos,hrp_onscreen = dwCamera:WorldToViewportPoint(hrp.Position)
             local p_root_pos, p_onscreen = dwCamera:WorldToViewportPoint(dwLocalPlayer.Character:WaitForChild("HumanoidRootPart").Position)
             local cframe = get_pivot(cr);
@@ -278,7 +279,7 @@ local function esp(p,cr)
             end
             
             if hrp_onscreen and hrp.Position.Y > -300 then
-                line.From = Vector2.new(p_root_pos.X, p_root_pos.Y)
+                line.From = Vector2.new(mouseLocation.X, mouseLocation.Y)
                 line.To = Vector2.new(hrp_pos.X, floor(y - height * 0.5)+25)
                 text.Position = Vector2.new(hrp_pos.X, floor(y - height * 0.5)-25)
                 text.Text = p.Name.. " [ "..p:FindFirstChild("Ping").Value.. "ms ]"
