@@ -253,7 +253,7 @@ local function esp(p,cr)
     c1 = dwRunService.RenderStepped:Connect(function()
         if true then
             local mouseLocation = dwUIS:GetMouseLocation()
-            local hrp_pos,hrp_onscreen = dwCamera:WorldToViewportPoint(hrp.Position)
+            local hrp_pos,hrp_onscreen = dwCamera:WorldToViewportPoint(hrp.Position);
             local p_root_pos, p_onscreen = dwCamera:WorldToViewportPoint(dwLocalPlayer.Character:WaitForChild("HumanoidRootPart").Position)
             local cframe = get_pivot(cr);
             local position, visible = dwCamera:WorldToViewportPoint(cframe.Position);
