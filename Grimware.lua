@@ -260,6 +260,14 @@ local function esp(p,cr)
             local headPos, visible = dwCamera:WorldToViewportPoint(cr:WaitForChild("Head").Position);
             local rightFootPos, visible = dwCamera:WorldToViewportPoint(cr:WaitForChild("RightFoot").Position);
             local leftFootPos, visible = dwCamera:WorldToViewportPoint(cr:WaitForChild("LeftFoot").Position);
+            local rightUpperLeg, visible = dwCamera:WorldToViewportPoint(cr:WaitForChild("RightUpperLeg").Position);
+            local leftUpperLeg, visible = dwCamera:WorldToViewportPoint(cr:WaitForChild("LeftUpperLeg").Position);
+            local rightLowerLeg, visible = dwCamera:WorldToViewportPoint(cr:WaitForChild("RightLowerLeg").Position);
+            local leftLowerLeg, visible = dwCamera:WorldToViewportPoint(cr:WaitForChild("LeftLowerLeg").Position);
+            local rightUpperArm, visible = dwCamera:WorldToViewportPoint(cr:WaitForChild("RightUpperArm").Position);
+            local leftUpperArm, visible = dwCamera:WorldToViewportPoint(cr:WaitForChild("LeftUpperArm").Position);
+            local rightLowerArm, visible = dwCamera:WorldToViewportPoint(cr:WaitForChild("RightLowerArm").Position);
+            local leftLowerArm, visible = dwCamera:WorldToViewportPoint(cr:WaitForChild("LeftLowerArm").Position);
             local scale_factor = 1 / (position.Z * tan(rad(dwCamera.FieldOfView * 0.5)) * 2) * 100;
             local scale_factorH = 1 / (headPos.Z * tan(rad(dwCamera.FieldOfView * 0.5)) * 2) * 100;
             
@@ -279,6 +287,8 @@ local function esp(p,cr)
             end
             
             if hrp_onscreen and hrp.Position.Y > -300 then
+                
+
                 line.From = Vector2.new(mouseLocation.X, mouseLocation.Y)
                 line.To = Vector2.new(hrp_pos.X, floor(y - height * 0.5)+25)
                 text.Position = Vector2.new(hrp_pos.X, floor(y - height * 0.5)-25)
@@ -663,12 +673,10 @@ MovementSection:AddBind({
 		if (dwLocalPlayer.Character:WaitForChild("Humanoid").FloorMaterial ~= Enum.Material.Air) then
             dwLocalPlayer.Character:WaitForChild("Humanoid").Jump = true
             dwLocalPlayer.Character:WaitForChild("HumanoidRootPart").Velocity = Vector3.new(0,NumBypass,0)
-            wait(0.3)
-            dwLocalPlayer.Character:WaitForChild("HumanoidRootPart").Velocity = Vector3.new(0,-NumBypass,0)
-            notify("Launch", "Waiting for land...")
+            notify("Launch", "Waiting for perfect time...")
             repeat
                 wait()
-            until (dwLocalPlayer.Character:WaitForChild("Humanoid").FloorMaterial ~= Enum.Material.Air)
+            until (dwLocalPlayer.Character:WaitForChild("HumanoidRootPart").Velocity.Y < 0)
             dwLocalPlayer.Character:WaitForChild("Humanoid").Jump = true
             wait(0.1)
             notify("Launch", "Launching...")
@@ -954,8 +962,8 @@ RenderSection:AddToggle({
 })
 
 RenderSection:AddToggle({
-	Name = "Circle ESP",
-    Flag = "circlesESP",
+	Name = "Skeleton ESP",
+    Flag = "skeletonESP",
     Save = true,
 	Default = false,
 	Callback = function(t)
