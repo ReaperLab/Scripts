@@ -920,7 +920,7 @@ RageSection:AddToggle({
 		Client.Combat.INFHEAL = t
         while Client.Combat.INFHEAL do
             for _,v in pairs(dwWorkspace:FindFirstChild("Debris"):GetChildren()) do
-                if v.Name ~= "DeadHP" then
+                if v.Name ~= "DeadHP" or dwLocalPlayer.NRPBS["Health"].Value == dwLocalPlayer.NRPBS["MaxHealth"].Value then
                     continue
                 end
                 pcall(function()
