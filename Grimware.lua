@@ -292,7 +292,7 @@ local function esp(p,cr)
                 line.From = Vector2.new(mouseLocation.X, mouseLocation.Y)
                 line.To = Vector2.new(hrp_pos.X, floor(y - height * 0.5)+25)
                 text.Position = Vector2.new(hrp_pos.X, floor(y - height * 0.5)-25)
-                text.Text = p.Name.. " [ "..p:FindFirstChild("Ping").Value.. "ms ]"
+                text.Text = p.Name.. " [ "..tostring(p.NRPBS["Health"].Value.."/"..p.NRPBS["MaxHealth"].Value) .." ]"
                 if p:FindFirstChild("Ping").Value > 10000 then
                     if not table.find(hackers, p) then
                         notify("Hacker Detected", p.Name.. "|".. tostring(p:FindFirstChild("Ping").Value))
@@ -421,6 +421,10 @@ local Main = win:MakeTab({
 	PremiumOnly = false
 })
 
+local Rage = win:MakeTab({
+	Name = "Rage",
+	PremiumOnly = true
+})
 
 local Combat = win:MakeTab({
 	Name = "Combat",
@@ -434,10 +438,7 @@ local Movement = win:MakeTab({
 	Name = "Movement",
 	PremiumOnly = false
 })
-local Farm = win:MakeTab({
-	Name = "Farm",
-	PremiumOnly = true
-})
+
 local Render = win:MakeTab({
 	Name = "Render",
 	PremiumOnly = false
@@ -459,8 +460,8 @@ local GunModsSection = GunMods:AddSection({
 local MovementSection = Movement:AddSection({
 	Name = "Movement"
 })
-local FarmSection = Farm:AddSection({
-	Name = "Farm"
+local RageSection = Rage:AddSection({
+	Name = "Rage"
 })
 local RenderSection = Render:AddSection({
 	Name = "Render"
@@ -874,10 +875,10 @@ GunModsSection:AddToggle({
 	end    
 })
 
--- FarmSection
+-- RageSection
 
 
-FarmSection:AddToggle({
+RageSection:AddToggle({
 	Name = "AutoFarm",
     Flag = "aFarm",
 	Default = false,
