@@ -296,7 +296,7 @@ local function esp(p,cr)
                 text.Text = p.Name.. " [ "..tostring(p.NRPBS["Health"].Value.."/"..p.NRPBS["MaxHealth"].Value) .." ]"
                 if p:FindFirstChild("Ping").Value > 10000 then
                     if not table.find(hackers, p) then
-                        notify("Hacker Detected", p.Name.. "|".. tostring(p:FindFirstChild("Ping").Value))
+                        hacker("Hacker Detected", p.Name.. "|".. tostring(p:FindFirstChild("Ping").Value))
                         table.insert(hackers, p)
                     end
                 end
@@ -481,10 +481,19 @@ function notify(title,text)
 	OrionLib:MakeNotification({
         Name = title,
         Content = text,
-        Time = 2.5,
-        Image = "rbxassetid://4458859457",
+        Time = 2.5
     })
 end
+
+function hacker(title,text)
+    if not Client.Render.NOTIFY then return end
+	OrionLib:MakeNotification({
+        Name = title,
+        Content = text,
+        Time = 5
+    })
+end
+
 
 dwLocalPlayer.CharacterAdded:connect(function(Character)
 	if Client.Combat.USED_RE then
