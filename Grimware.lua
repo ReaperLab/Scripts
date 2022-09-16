@@ -291,7 +291,7 @@ local function esp(p,cr)
                 
 
                 line.From = Vector2.new(mouseLocation.X, mouseLocation.Y)
-                line.To = Vector2.new(hrp_pos.X, floor(y - height * 0.5)+25)
+                line.To = Vector2.new(x, floor(y - height * 0.5))
                 text.Position = Vector2.new(hrp_pos.X, floor(y - height * 0.5)-25)
                 text.Text = p.Name.. " [ "..tostring(p.NRPBS["Health"].Value.."/"..p.NRPBS["MaxHealth"].Value) .." ]"
                 if p:FindFirstChild("Ping").Value > 10000 then
