@@ -19,6 +19,7 @@ local Client = {
         FLYHELD = false
     },
     Combat = {
+        INFHEAL = false,
         AIMBOT = false,
         AIMBOT_SETTINGS = {
             Aimbot = true,
@@ -904,6 +905,30 @@ RageSection:AddToggle({
                     until v.Character:FindFirstChild("HumanoidRootPart").Position.Y < -300 or not Client.Combat.AUTOFARM
                 end)
                 
+            end
+            wait()
+        end
+	end    
+})
+
+RageSection:AddToggle({
+	Name = "AutoHeal",
+    Flag = "aHeal",
+	Default = false,
+    Save = true,
+	Callback = function(t)
+		Client.Combat.INFHEAL = t
+        while Client.Combat.INFHEAL do
+            for _,v in pairs(dwWorkspace:FindFirstChild("Debris"):GetChildren()) do
+                if v.Name ~= "DeadHP" then
+                    continue
+                end
+                pcall(function()
+                    firetouchinterest(dwLocalPlayer.Character:WaitForChild("RightUpperLeg"), v,1)
+                    wait(0)
+                    firetouchinterest(dwLocalPlayer.Character:WaitForChild("RightUpperLeg"), v,0)
+                end)
+                wait()
             end
             wait()
         end
